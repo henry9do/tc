@@ -39,7 +39,8 @@ pub struct Topology {
     pub mutations: Option<Mutations>,
     pub schedules: HashMap<String, Schedule>,
     pub queues: HashMap<String, Queue>,
-    pub flow: Option<Value>
+    pub flow: Option<Value>,
+    pub log_all:  Option<Bool>
 }
 
 fn relative_root_path() -> (String, String) {
@@ -304,6 +305,7 @@ fn make_standalone(dir: &str) -> Topology {
         dir: s!(dir),
         mode: None,
         hyphenated_names: false,
+        log_all: true,
         events: None,
         routes: None,
         flow: None,
