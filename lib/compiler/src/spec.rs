@@ -55,6 +55,7 @@ impl BasicSpec {
             BasicSpec {
                 name: String::from("tc"),
                 hyphenated_names: false,
+                include_execution_data: true,
                 events: None
             }
         }
@@ -165,6 +166,8 @@ pub struct Spec {
     pub mode: Option<String>,
     #[serde(default)]
     pub hyphenated_names: bool,
+    #[serde(default)]
+    pub include_execution_data: bool,
     #[serde(default = "default_functions")]
     pub functions: Functions,
     #[serde(default = "default_nodes")]
@@ -193,6 +196,7 @@ impl Spec {
                 name: s!("tc"),
                 kind: s!("step-function"),
                 hyphenated_names: false,
+                include_execution_data: true,
                 version: None,
                 infra: None,
                 mode: None,
@@ -215,4 +219,5 @@ impl Spec {
             "regular"
         }
     }
+
 }
