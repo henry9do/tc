@@ -34,13 +34,13 @@ pub struct Topology {
     pub version: Option<String>,
     pub events: Option<Events>,
     pub hyphenated_names: bool,
+    pub include_execution_data:  Option<Bool>,
     pub routes: Option<HashMap<String, Route>>,
     pub functions: HashMap<String, FunctionSpec>,
     pub mutations: Option<Mutations>,
     pub schedules: HashMap<String, Schedule>,
     pub queues: HashMap<String, Queue>,
-    pub flow: Option<Value>,
-    pub log_all:  Option<Bool>
+    pub flow: Option<Value>
 }
 
 fn relative_root_path() -> (String, String) {
@@ -278,6 +278,7 @@ fn make(
         dir: s!(dir),
         mode: spec.mode.to_owned(),
         hyphenated_names: spec.hyphenated_names.to_owned(),
+        include_execution_data: spec.include_execution_data.to_owned(),
         events: spec.events.to_owned(),
         schedules: schedule::make(&infrastructure_dir),
         routes: spec.routes.to_owned(),
@@ -305,7 +306,7 @@ fn make_standalone(dir: &str) -> Topology {
         dir: s!(dir),
         mode: None,
         hyphenated_names: false,
-        log_all: true,
+        include_execution_data: true,
         events: None,
         routes: None,
         flow: None,
@@ -325,6 +326,7 @@ pub fn basic_spec(dir: &str) -> BasicSpec {
         BasicSpec {
             name: String::from("default"),
             hyphenated_names: false,
+            include_execution_data: true,
             events: None
         }
     }
