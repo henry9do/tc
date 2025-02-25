@@ -39,7 +39,7 @@ fn make_tags(kvs: HashMap<String, String>) -> Vec<Tag> {
     tags
 }
 
-fn make_log_config(log_group_arn: &str, enable: bool) -> LoggingConfiguration {
+fn make_log_config(log_group_arn: &str, enable: bool, log_all: Option<bool>) -> LoggingConfiguration {
     if enable {
         let lg = CloudWatchLogsLogGroupBuilder::default();
         let group = lg.log_group_arn(log_group_arn).build();
@@ -49,13 +49,13 @@ fn make_log_config(log_group_arn: &str, enable: bool) -> LoggingConfiguration {
 
         let lc = LoggingConfigurationBuilder::default();
         lc.level(LogLevel::All)
-            .include_execution_data(true)
+            .include_execution_data(log_all.unwrap_or(true))
             .destinations(destination)
             .build()
     } else {
         let lc = LoggingConfigurationBuilder::default();
         lc.level(LogLevel::Off)
-            .include_execution_data(false)
+            .include_execution_data(log_all.unwrap_or(true))
             .build()
     }
 }
@@ -278,8 +278,9 @@ pub async fn list_tags(client: &Client, arn: &str) -> Result<HashMap<String, Str
     }
 }
 
-pub async fn enable_logging(client: Client, arn: &str, log_arn: &str) -> Result<(), Error> {
-    let log_config = make_log_config(log_arn, true);
+pub async fn enable_logging(client: Client, arn: &str, log_arn: &str, log_all: Optional<bool>) -> Result<(), Error> {
+    
+    let log_config = make_log_config(log_arn, true, log_all.unwrap_or(true));
     let res = client
         .update_state_machine()
         .state_machine_arn(arn.to_string())
@@ -293,7 +294,7 @@ pub async fn enable_logging(client: Client, arn: &str, log_arn: &str) -> Result<
 }
 
 pub async fn disable_logging(client: Client, arn: &str) -> Result<(), Error> {
-    let log_config = make_log_config("", false);
+    let log_config = make_log_config("", false, log_all.unwrap_or(false));
     let res = client
         .update_state_machine()
         .state_machine_arn(arn.to_string())
