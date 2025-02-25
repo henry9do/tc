@@ -42,6 +42,7 @@ pub struct BasicSpec {
     pub name: String,
     #[serde(default)]
     pub hyphenated_names: bool,
+    pub include_execution_data: bool,
     pub events: Option<Events>,
 }
 
